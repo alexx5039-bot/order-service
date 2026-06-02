@@ -3,7 +3,11 @@ from __future__ import annotations
 from decimal import Decimal
 
 from sqlalchemy import ForeignKey, Numeric
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import (
+    Mapped,
+    mapped_column,
+    relationship
+)
 
 from app.database import Base
 
@@ -22,9 +26,9 @@ class Order(Base):
         default=Decimal("0.00")
     )
     customer: Mapped["Customer"] = relationship(
-        back_populates="order"
+        back_populates="orders"
     )
-    items: Mapped[list["OrderItems"]] = relationship(
+    items: Mapped[list["OrderItem"]] = relationship(
         back_populates="order",
         cascade="all, delete-orphan"
     )

@@ -23,10 +23,6 @@ class Customer(Base):
     )
 
     orders: Mapped[list["Order"]] = relationship(
-        back_populates="customers",
+        back_populates="customer",
         cascade="all, delete-orphan"
     )
-
-
-
-
