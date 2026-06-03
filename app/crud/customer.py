@@ -7,44 +7,23 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.customer import Customer
 
 
-async def create_customer(
-        db: AsyncSession,
-        name: str,
-        email: str
-) -> Customer:
-    customer = Customer(
-        name=name,
-        email=email
-    )
+async def create_customer(db: AsyncSession, name: str, email: str) -> Customer:
+    customer = Customer(name=name, email=email)
     db.add(customer)
 
     return customer
 
 
-async def get_customer_by_id(
-        db: AsyncSession,
-        customer_id: int
-) -> Customer | None:
-    result = await db.execute(
-        select(Customer).where(
-            Customer.id == customer_id
-        )
-    )
+async def get_customer_by_id(db: AsyncSession, customer_id: int) -> Customer | None:
+    result = await db.execute(select(Customer).where(Customer.id == customer_id))
     customer = result.scalar_one_or_none()
 
     return customer
 
 
-async def get_customer_by_email(
-        db: AsyncSession,
-        email: EmailStr
-) -> Customer | None:
+async def get_customer_by_email(db: AsyncSession, email: EmailStr) -> Customer | None:
 
-    result = await db.execute(
-        select(Customer).where(
-            Customer.email == email
-        )
-    )
+    result = await db.execute(select(Customer).where(Customer.email == email))
     customer = result.scalar_one_or_none()
 
     return customer

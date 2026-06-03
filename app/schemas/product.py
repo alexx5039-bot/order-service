@@ -1,9 +1,6 @@
 from decimal import Decimal
 
-from pydantic import (
-    BaseModel,
-    ConfigDict
-)
+from pydantic import BaseModel, ConfigDict
 
 
 class ProductCreate(BaseModel):
@@ -16,6 +13,4 @@ class ProductResponse(BaseModel):
     name: str
     price: Decimal
 
-    model_config = ConfigDict(
-        from_attributes=True
-    )
+    model_config = ConfigDict(from_attributes=True)

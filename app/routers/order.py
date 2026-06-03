@@ -18,6 +18,7 @@ router = APIRouter(
     tags=["Orders"],
 )
 
+
 @router.post(
     "/",
     response_model=OrderResponse,
@@ -34,16 +35,10 @@ async def create_order(
     return order
 
 
-@router.get(
-    "/customer/{customer_id}",
-    response_model=list[OrderResponse]
-)
+@router.get("/customer/{customer_id}", response_model=list[OrderResponse])
 async def get_customer_orders(
-        customer_id: int,
-        db: AsyncSession = Depends(get_db),
+    customer_id: int,
+    db: AsyncSession = Depends(get_db),
 ):
-    orders = await get_customer_orders_service(
-        db,
-        customer_id
-    )
+    orders = await get_customer_orders_service(db, customer_id)
     return orders

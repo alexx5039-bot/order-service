@@ -10,19 +10,12 @@ from app.models.order import Order
 from app.models.order_item import OrderItem
 
 
-async def get_order_by_customer_id(
-        db: AsyncSession,
-        customer_id: int
-) -> list[Order]:
+async def get_order_by_customer_id(db: AsyncSession, customer_id: int) -> list[Order]:
 
     result = await db.execute(
         select(Order)
-        .options(
-            selectinload(Order.items)
-        )
-        .where(
-            Order.customer_id == customer_id
-        )
+        .options(selectinload(Order.items))
+        .where(Order.customer_id == customer_id)
     )
 
     orders = result.scalars().all()
@@ -31,48 +24,35 @@ async def get_order_by_customer_id(
 
 
 async def create_order(
-        db: AsyncSession,
-        customer_id: int,
-        total_amount: Decimal
+    db: AsyncSession, customer_id: int, total_amount: Decimal
 ) -> Order:
 
-    order = Order(
-        customer_id=customer_id,
-        total_amount=total_amount
-    )
+    order = Order(customer_id=customer_id, total_amount=total_amount)
     db.add(order)
 
     return order
 
 
 async def create_order_item(
-        db: AsyncSession,
-        order_id: int,
-        product_id: int,
-        quantity: int,
+    db: AsyncSession,
+    order_id: int,
+    product_id: int,
+    quantity: int,
 ) -> OrderItem:
 
-    order_item = OrderItem(
-        order_id=order_id,
-        product_id=product_id,
-        quantity=quantity
-    )
+    order_item = OrderItem(order_id=order_id, product_id=product_id, quantity=quantity)
     db.add(order_item)
 
     return order_item
 
 
 async def get_order_by_id(
-        db: AsyncSession,
-        order_id: int,
+    db: AsyncSession,
+    order_id: int,
 ) -> Order | None:
 
     result = await db.execute(
-        select(Order)
-        .options(
-            selectinload(Order.items)
-        )
-        .where(Order.id == order_id)
+        select(Order).options(selectinload(Order.items)).where(Order.id == order_id)
     )
 
     order = result.scalar_one_or_none()
@@ -81,19 +61,14 @@ async def get_order_by_id(
 
 
 async def get_orders_by_customer(
-        db: AsyncSession,
-        customer_id: int,
+    db: AsyncSession,
+    customer_id: int,
 ) -> list[Order]:
 
     result = await db.execute(
         select(Order)
-        .options(
-            selectinload(Order.items)
-            .selectinload(OrderItem.product)
-        )
-        .where(
-            Order.customer_id == customer_id
-        )
+        .options(selectinload(Order.items).selectinload(OrderItem.product))
+        .where(Order.customer_id == customer_id)
     )
     orders = result.scalars().all()
 

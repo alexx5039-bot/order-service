@@ -1,24 +1,13 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.crud.customer import (
-    create_customer,
-    get_customer_by_email
-)
+from app.crud.customer import create_customer, get_customer_by_email
 from app.schemas.customer import CustomerCreate
 
 
-async def create_customer_service(
-        db: AsyncSession,
-        customer_data: CustomerCreate
-):
-    existing_customer = await get_customer_by_email(
-        db,
-        customer_data.email
-    )
+async def create_customer_service(db: AsyncSession, customer_data: CustomerCreate):
+    existing_customer = await get_customer_by_email(db, customer_data.email)
     if existing_customer:
-        raise ValueError(
-            "Customer with this email already exists"
-        )
+        raise ValueError("Customer with this email already exists")
     try:
         customer = await create_customer(
             db,
@@ -33,6 +22,3 @@ async def create_customer_service(
     except Exception:
         await db.rollback()
         raise
-
-
-

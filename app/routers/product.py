@@ -10,18 +10,12 @@ from app.services.product_service import (
     create_product_service,
 )
 
-router = APIRouter(
-    prefix="/products",
-    tags=["Products"]
-)
+router = APIRouter(prefix="/products", tags=["Products"])
+
 
 @router.post("/", response_model=ProductResponse, status_code=201)
 async def create_product(
-        product_data: ProductCreate,
-        db: AsyncSession = Depends(get_db)
+    product_data: ProductCreate, db: AsyncSession = Depends(get_db)
 ):
-    product = await create_product_service(
-        db,
-        product_data
-    )
+    product = await create_product_service(db, product_data)
     return product

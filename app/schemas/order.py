@@ -1,10 +1,7 @@
 from decimal import Decimal
 
-from pydantic import (
-    BaseModel,
-    ConfigDict,
-    Field
-)
+from pydantic import BaseModel, ConfigDict, Field
+
 
 class OrderItemCreate(BaseModel):
     product_id: int
@@ -13,18 +10,14 @@ class OrderItemCreate(BaseModel):
 
 class OrderCreate(BaseModel):
     customer_id: int
-    items: list[OrderItemCreate] = Field(
-        min_length=1
-    )
+    items: list[OrderItemCreate] = Field(min_length=1)
 
 
 class OrderItemResponse(BaseModel):
     product_id: int
     quantity: int
 
-    model_config = ConfigDict(
-        from_attributes=True
-    )
+    model_config = ConfigDict(from_attributes=True)
 
 
 class OrderResponse(BaseModel):
@@ -33,6 +26,4 @@ class OrderResponse(BaseModel):
     total_amount: Decimal
     items: list[OrderItemResponse]
 
-    model_config = ConfigDict(
-        from_attributes=True
-    )
+    model_config = ConfigDict(from_attributes=True)
