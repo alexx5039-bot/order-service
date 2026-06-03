@@ -16,10 +16,15 @@ async def get_order_by_customer_id(
 ) -> list[Order]:
 
     result = await db.execute(
-        select(Order).where(
+        select(Order)
+        .options(
+            selectinload(Order.items)
+        )
+        .where(
             Order.customer_id == customer_id
         )
     )
+
     orders = result.scalars().all()
 
     return list(orders)
@@ -33,7 +38,7 @@ async def create_order(
 
     order = Order(
         customer_id=customer_id,
-        amount=total_amount
+        total_amount=total_amount
     )
     db.add(order)
 
@@ -63,10 +68,13 @@ async def get_order_by_id(
 ) -> Order | None:
 
     result = await db.execute(
-        select(Order).where(
-            Order.id == order_id
+        select(Order)
+        .options(
+            selectinload(Order.items)
         )
+        .where(Order.id == order_id)
     )
+
     order = result.scalar_one_or_none()
 
     return order

@@ -1,5 +1,5 @@
 from decimal import Decimal
-from http.client import HTTPException
+from fastapi import HTTPException
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.order import OrderCreate
@@ -7,7 +7,9 @@ from app.crud.customer import get_customer_by_id
 from app.crud.product import get_product_by_id
 from app.crud.order import (
     create_order,
-    create_order_item
+    create_order_item,
+    get_order_by_customer_id,
+    get_order_by_id
 )
 
 async def create_order_service(
@@ -56,8 +58,34 @@ async def create_order_service(
                 quantity=item.quantity
             )
         await db.commit()
-        await db.refresh(order)
+
+        return await get_order_by_id(
+            db,
+            order.id
+        )
 
     except Exception:
         await db.rollback()
         raise
+
+
+async def get_customer_orders_service(
+        db: AsyncSession,
+        customer_id: int
+):
+    customer = await get_customer_by_id(
+        db,
+        customer_id
+    )
+
+    if not customer:
+        raise HTTPException(
+            status_code=404,
+            detail="Customer not found"
+        )
+
+    orders = await get_order_by_customer_id(
+        db,
+        customer_id
+    )
+    return orders
