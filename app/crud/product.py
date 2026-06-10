@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from decimal import Decimal
 
 from sqlalchemy import select
@@ -22,3 +23,11 @@ async def get_product_by_id(db: AsyncSession, product_id: int) -> Product | None
     product = result.scalar_one_or_none()
 
     return product
+
+
+async def get_all_products(db: AsyncSession) -> Sequence[Product] | None:
+
+    result = await db.execute(select(Product))
+    products = result.scalars().all()
+
+    return list(products)

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
+
 from pydantic import EmailStr
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -27,3 +29,9 @@ async def get_customer_by_email(db: AsyncSession, email: EmailStr) -> Customer |
     customer = result.scalar_one_or_none()
 
     return customer
+
+async def get_all_customers(db: AsyncSession) -> Sequence[Customer] | None:
+    result = await db.execute(select(Customer))
+    customers = list(result.scalars().all())
+
+    return customers
