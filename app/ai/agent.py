@@ -8,7 +8,10 @@ from app.ai.tools import (
     get_all_customers,
     create_product,
     get_product,
-    get_all_products
+    get_all_products,
+    create_order,
+    get_customer_orders,
+    get_orders_by_id
 )
 from langchain_mistralai import (
     ChatMistralAI
@@ -29,6 +32,9 @@ agent = create_agent(
         get_all_customers,
         create_product,
         get_product,
-        get_all_products
+        get_all_products,
+        create_order,
+        get_customer_orders,
+        get_orders_by_id
     ]
 )

@@ -11,7 +11,7 @@ async def main():
                 {
                     "role": "user",
                     "content": (
-                        "How many product are in database"
+                        "What is the largest order of customer with id 1"
 
                     )
                 }

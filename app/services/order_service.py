@@ -58,3 +58,12 @@ async def get_customer_orders_service(db: AsyncSession, customer_id: int):
 
     orders = await get_order_by_customer_id(db, customer_id)
     return orders
+
+
+async def get_order_by_id_service(db: AsyncSession, order_id: int):
+    order = await get_order_by_id(db, order_id)
+
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    return order
