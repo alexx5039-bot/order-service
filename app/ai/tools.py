@@ -21,6 +21,9 @@ from app.services.order_service import (
     get_customer_orders_service,
     get_order_by_id_service
 )
+from app.services.sales_service import get_sales_report_service
+
+
 
 @tool
 async def get_customer(customer_id: int) -> str:
@@ -222,3 +225,15 @@ async def get_orders_by_id(order_id: int) -> dict:
         return {
             "error": e.detail
         }
+
+
+@tool
+async def get_sales_report() -> dict:
+    """
+    Get sales statistics
+
+    """
+    async with AsyncSessionLocal() as db:
+        return await get_sales_report_service(db)
+
+
