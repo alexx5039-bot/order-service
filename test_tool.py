@@ -1,28 +1,30 @@
 import asyncio
-import app.models
-
-from app.ai.tools import create_customer, get_customer
 from app.ai.agent import agent
 
+
 async def main():
-    result = await agent.ainvoke(
-        {
-            "messages": [
-                {
-                    "role": "user",
-                    "content": (
-                        "Show sales report"
+    session_id = "user_1"
 
-                    )
+    while True:
+        message = input("You: ")
+
+        result = await agent.ainvoke(
+            {
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": message
+                    }
+                ]
+            },
+            config={
+                "configurable": {
+                    "thread_id": session_id
                 }
-            ]
-        }
-    )
-    print(result["messages"][-1].content)
-    for message in result["messages"]:
-        print(type(message))
-        print(message)
+            }
+        )
 
+        print(result["messages"][-1].content)
 
 
 asyncio.run(main())
